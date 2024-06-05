@@ -16,4 +16,4 @@
     <li>Uses Flexbox for a mobile first responsive design.
 </ul>
 
-_&copy; The Tuned Circuit_ ⚬
+_&copy; The Tuned Circuit_
