@@ -1,19 +1,14 @@
-# The Tuned Circuit website
+# Welcome to your CDK TypeScript project
 
-[thetunedciruit.com](https://www.thetunedcircuit.com)
+This is a blank project for CDK development with TypeScript.
 
-## Attributes
+The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
-<ul>
-    <li>Hosted on AWS using the following services:</li>
-        <ul>
-            <li>S3 bucket (storage)</li>
-            <li>CloudFront (Distribution)</li>
-            <li>ACM (Certification)</li>
-            <li>Route 53 (Domain Registration and DNS Routing)</li>
-        </ul>
-    <li>Built using HTML/CSS/Javascript</li>
-    <li>Uses Flexbox for a mobile first responsive design.
-</ul>
+## Useful commands
 
-_&copy; The Tuned Circuit_
+* `npm run build`   compile typescript to js
+* `npm run watch`   watch for changes and compile
+* `npm run test`    perform the jest unit tests
+* `npx cdk deploy`  deploy this stack to your default AWS account/region
+* `npx cdk diff`    compare deployed stack with current state
+* `npx cdk synth`   emits the synthesized CloudFormation template
