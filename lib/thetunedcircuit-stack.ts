@@ -8,14 +8,14 @@ export class ThetunedcircuitStack extends cdk.Stack {
 		const subDomain = "www.thetunedcircuit.com";
 		const rootDomain = "thetunedcircuit.com";
 
-		const rootDomainBucket = new cdk.aws_s3.Bucket(this, subDomain, {
+		const subDomainBucket = new cdk.aws_s3.Bucket(this, subDomain, {
 			autoDeleteObjects: true,
 			bucketName: subDomain,
 			bucketKeyEnabled: true,
 			encryption: cdk.aws_s3.BucketEncryption.S3_MANAGED,
 			removalPolicy: cdk.RemovalPolicy.DESTROY,
 		});
-		new cdk.aws_s3.Bucket(this, rootDomain, {
+		const rootDomainBucket = new cdk.aws_s3.Bucket(this, rootDomain, {
 			autoDeleteObjects: true,
 			bucketName: rootDomain,
 			bucketKeyEnabled: true,
@@ -25,9 +25,32 @@ export class ThetunedcircuitStack extends cdk.Stack {
 				hostName: subDomain,
 			},
 		});
+
 		new cdk.aws_s3_deployment.BucketDeployment(this, "DeployWebsite", {
 			sources: [cdk.aws_s3_deployment.Source.asset("./site")],
-			destinationBucket: rootDomainBucket,
+			destinationBucket: subDomainBucket,
+		});
+
+		const certificate = new cdk.aws_certificatemanager.Certificate(
+			this,
+			"Certificate",
+			{
+				domainName: rootDomain,
+				keyAlgorithm: cdk.aws_certificatemanager.KeyAlgorithm.RSA_2048,
+				validation: cdk.aws_certificatemanager.CertificateValidation.fromDns(),
+				subjectAlternativeNames: [rootDomain, `*.${rootDomain}`],
+			}
+		);
+
+		new cdk.aws_cloudfront.Distribution(this, "SubDomainDistribution", {
+			certificate: certificate,
+			defaultBehavior: {
+				origin: new cdk.aws_cloudfront_origins.S3Origin(subDomainBucket),
+				viewerProtocolPolicy:
+					cdk.aws_cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+			},
+			defaultRootObject: "index.html",
+			domainNames: [subDomain],
 		});
 	}
 }
