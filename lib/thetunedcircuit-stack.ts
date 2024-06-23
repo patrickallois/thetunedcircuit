@@ -8,13 +8,26 @@ export class ThetunedcircuitStack extends cdk.Stack {
 		const subDomain = "www.thetunedcircuit.com";
 		const rootDomain = "thetunedcircuit.com";
 
-		new cdk.aws_s3.Bucket(this, subDomain, {
-			removalPolicy: cdk.RemovalPolicy.DESTROY,
+		const rootDomainBucket = new cdk.aws_s3.Bucket(this, subDomain, {
+			autoDeleteObjects: true,
 			bucketName: subDomain,
+			bucketKeyEnabled: true,
+			encryption: cdk.aws_s3.BucketEncryption.S3_MANAGED,
+			removalPolicy: cdk.RemovalPolicy.DESTROY,
 		});
 		new cdk.aws_s3.Bucket(this, rootDomain, {
-			removalPolicy: cdk.RemovalPolicy.DESTROY,
+			autoDeleteObjects: true,
 			bucketName: rootDomain,
+			bucketKeyEnabled: true,
+			encryption: cdk.aws_s3.BucketEncryption.S3_MANAGED,
+			removalPolicy: cdk.RemovalPolicy.DESTROY,
+			websiteRedirect: {
+				hostName: subDomain,
+			},
+		});
+		new cdk.aws_s3_deployment.BucketDeployment(this, "DeployWebsite", {
+			sources: [cdk.aws_s3_deployment.Source.asset("./site")],
+			destinationBucket: rootDomainBucket,
 		});
 	}
 }
