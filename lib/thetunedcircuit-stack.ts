@@ -1,12 +1,12 @@
-import * as cdk from "aws-cdk-lib";
-import { Construct } from "constructs";
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 export class ThetunedcircuitStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 
-		const subDomain = "www.thetunedcircuit.com";
-		const rootDomain = "thetunedcircuit.com";
+		const subDomain = 'www.thetunedcircuit.com';
+		const rootDomain = 'thetunedcircuit.com';
 
 		const subDomainBucket = new cdk.aws_s3.Bucket(this, subDomain, {
 			autoDeleteObjects: true,
@@ -26,14 +26,14 @@ export class ThetunedcircuitStack extends cdk.Stack {
 			},
 		});
 
-		new cdk.aws_s3_deployment.BucketDeployment(this, "DeployWebsite", {
-			sources: [cdk.aws_s3_deployment.Source.asset("./site")],
+		new cdk.aws_s3_deployment.BucketDeployment(this, 'DeployWebsite', {
+			sources: [cdk.aws_s3_deployment.Source.asset('./site')],
 			destinationBucket: subDomainBucket,
 		});
 
 		const certificate = new cdk.aws_certificatemanager.Certificate(
 			this,
-			"Certificate",
+			'Certificate',
 			{
 				domainName: rootDomain,
 				keyAlgorithm: cdk.aws_certificatemanager.KeyAlgorithm.RSA_2048,
@@ -44,7 +44,7 @@ export class ThetunedcircuitStack extends cdk.Stack {
 
 		const subDomainDistribution = new cdk.aws_cloudfront.Distribution(
 			this,
-			"SubDomainDistribution",
+			'SubDomainDistribution',
 			{
 				certificate: certificate,
 				defaultBehavior: {
@@ -52,14 +52,14 @@ export class ThetunedcircuitStack extends cdk.Stack {
 					viewerProtocolPolicy:
 						cdk.aws_cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 				},
-				defaultRootObject: "index.html",
+				defaultRootObject: 'index.html',
 				domainNames: [subDomain],
 			}
 		);
 
 		const rootDomainDistribution = new cdk.aws_cloudfront.Distribution(
 			this,
-			"RootDomainDistribution",
+			'RootDomainDistribution',
 			{
 				certificate: certificate,
 				defaultBehavior: {
@@ -67,7 +67,7 @@ export class ThetunedcircuitStack extends cdk.Stack {
 					viewerProtocolPolicy:
 						cdk.aws_cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 				},
-				defaultRootObject: "index.html",
+				defaultRootObject: 'index.html',
 				domainNames: [rootDomain],
 			}
 		);

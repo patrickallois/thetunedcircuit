@@ -1,5 +1,5 @@
 body {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-style: italic;
 	background-color: #000000;
 	text-align: center;
@@ -12,7 +12,7 @@ body {
 	height: 100vh; /* Set the desired minimum height */
 	position: relative;
 	background-image: linear-gradient(rgba(0, 0, 0, 10), rgba(0, 0, 0, 0.4)),
-		url("../images/header-background.png");
+		url('../images/header-background.png');
 	background-size: cover;
 	background-position: center;
 	border-radius: 8px;
