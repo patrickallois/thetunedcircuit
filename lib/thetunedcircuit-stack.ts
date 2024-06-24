@@ -42,15 +42,34 @@ export class ThetunedcircuitStack extends cdk.Stack {
 			}
 		);
 
-		new cdk.aws_cloudfront.Distribution(this, "SubDomainDistribution", {
-			certificate: certificate,
-			defaultBehavior: {
-				origin: new cdk.aws_cloudfront_origins.S3Origin(subDomainBucket),
-				viewerProtocolPolicy:
-					cdk.aws_cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-			},
-			defaultRootObject: "index.html",
-			domainNames: [subDomain],
-		});
+		const subDomainDistribution = new cdk.aws_cloudfront.Distribution(
+			this,
+			"SubDomainDistribution",
+			{
+				certificate: certificate,
+				defaultBehavior: {
+					origin: new cdk.aws_cloudfront_origins.S3Origin(subDomainBucket),
+					viewerProtocolPolicy:
+						cdk.aws_cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+				},
+				defaultRootObject: "index.html",
+				domainNames: [subDomain],
+			}
+		);
+
+		const rootDomainDistribution = new cdk.aws_cloudfront.Distribution(
+			this,
+			"RootDomainDistribution",
+			{
+				certificate: certificate,
+				defaultBehavior: {
+					origin: new cdk.aws_cloudfront_origins.S3Origin(rootDomainBucket),
+					viewerProtocolPolicy:
+						cdk.aws_cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+				},
+				defaultRootObject: "index.html",
+				domainNames: [rootDomain],
+			}
+		);
 	}
 }
